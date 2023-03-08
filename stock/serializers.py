@@ -9,4 +9,22 @@ class CategorySerializer(serializers.ModelSerializer):
         
     def get_product_count(self,obj):
         return Product.objects.filter(category_id=obj.id).count()
+    
+class ProductSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model=Product
+        fields="__all__"    
+    
+class CategoryProductSerializer(serializers.ModelSerializer):
+    products=ProductSerializer(many=True)
+    product_count=serializers.SerializerMethodField() #bu method readonly, sadece get ile görüntülenir.
+    class Meta:
+        model=Category
+        fields = ("id", "name","product_count","products")
+        
+    def get_product_count(self,obj):
+        return Product.objects.filter(category_id=obj.id).count()
+    
+        
             
