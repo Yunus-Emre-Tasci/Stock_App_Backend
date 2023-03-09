@@ -45,7 +45,7 @@ class Purchases(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE,related_name="purchase")
     quantity=models.PositiveSmallIntegerField()
     price=models.DecimalField(max_digits=6,decimal_places=2)
-    price_total=models.DecimalField(max_digits=8,decimal_places=2,blank=True)
+    price_total=models.DecimalField(max_digits=8,decimal_places=2,blank=True)  #blank=True serializer ile ilgili (yani serializer bunu boş olarak kabul edebilir),ama database e bunu boş olarak kaydedemem. null=True da deseydik database de boş olarak kaydedebilirdik.
     
     def __str__(self):
         return f"{self.product} - {self.quantity}"

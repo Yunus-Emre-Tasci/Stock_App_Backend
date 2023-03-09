@@ -10,20 +10,15 @@ class CategorySerializer(serializers.ModelSerializer):
     def get_product_count(self,obj):
         return Product.objects.filter(category_id=obj.id).count()
     
-
-
 class ProductSerializer(serializers.ModelSerializer):
-    category=serializers.StringRelatedField()
+    category=serializers.StringRelatedField() #bu metod otomatik readonly
     brand=serializers.StringRelatedField() #bu metodun amacı, Foreign key ile bağlı olduğu için sadece id si geliyordu, sadece id si gelmesin, ilgili brandin ismi de gelsin demek.
     class Meta:
         model=Product
         fields=("id","name","category","category_id","brand","brand_id","stock",)    
         
         read_only_fields=("stock",) #readonly yapmamızın amacı buradaki stock miktarının purchase ve sales lara göre değişiecek.
-    
-    
-    
-    
+        
 class CategoryProductSerializer(serializers.ModelSerializer):
     products=ProductSerializer(many=True)
     product_count=serializers.SerializerMethodField() #bu method readonly, sadece get ile görüntülenir.
@@ -53,3 +48,12 @@ class FirmSerializer(serializers.ModelSerializer):
             "image",
             "address"
         )                
+        
+class PurchasesSerializer(serializers.ModelSerializer):
+    user=serializers.StringRelatedField()
+    firm=serializers.StringRelatedField()
+    brand=serializers.StringRelatedField()
+    product=serializers.StringRelatedField()
+    class Meta:
+        model=Purchases
+        fields=("id","user","user_id","firm","firm_id","brand","brand_id","product","product_id","quantity","price","price_total","createds","updated",)        
