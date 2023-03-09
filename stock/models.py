@@ -23,7 +23,7 @@ class Product(models.Model):
     category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name="products")
     brand=models.ForeignKey(Brand,on_delete=models.CASCADE,related_name="b_products")
     stock=models.PositiveSmallIntegerField(blank=True,default=0)
-    createdS=models.DateTimeField(auto_now_add=True)
+    createds=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now=True)
     
     def __str__(self):
