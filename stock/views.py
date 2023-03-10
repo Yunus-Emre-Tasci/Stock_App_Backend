@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets,filters,status
 from rest_framework.response import Response
 from .models import Category,Firm,Brand,Product,Purchases,Sales
-from .serializers import CategorySerializer,CategoryProductSerializer,BrandSerializer,FirmSerializer,ProductSerializer,PurchasesSerializer
+from .serializers import CategorySerializer,CategoryProductSerializer,BrandSerializer,FirmSerializer,ProductSerializer,PurchasesSerializer,SalesSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import DjangoModelPermissions
 
@@ -98,3 +98,35 @@ class PurchasesView(viewsets.ModelViewSet):
         product.save()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class SalesView(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = SalesSerializer
+    permission_classes = [DjangoModelPermissions]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ["category", "brand"]
+    search_fields = ["name"]  
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        sales=request.data
+        product=Product.objects.get(id=sales["product_id"])
+        
+        if sales["quantity"]<=product.stock:
+            product.stock-=sales["quantity"]
+            product.save()
+        else:
+            data={
+                "message":f"Dont have enough stock,current stock is {product.stock}"
+            }
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+        
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        
