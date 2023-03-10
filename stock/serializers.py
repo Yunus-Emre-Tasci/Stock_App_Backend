@@ -13,6 +13,8 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     category=serializers.StringRelatedField() #bu metod otomatik readonly
     brand=serializers.StringRelatedField() #bu metodun amacı, Foreign key ile bağlı olduğu için sadece id si geliyordu, sadece id si gelmesin, ilgili brandin ismi de gelsin demek.
+    brand_id = serializers.IntegerField()
+    category_id = serializers.IntegerField()
     class Meta:
         model=Product
         fields=("id","name","category","category_id","brand","brand_id","stock",)    
@@ -54,6 +56,9 @@ class PurchasesSerializer(serializers.ModelSerializer):
     firm=serializers.StringRelatedField()
     brand=serializers.StringRelatedField()
     product=serializers.StringRelatedField()
+    product_id = serializers.IntegerField()
+    brand_id = serializers.IntegerField()
+    firm_id = serializers.IntegerField()
     class Meta:
         model=Purchases
         fields=("id","user","user_id","firm","firm_id","brand","brand_id","product","product_id","quantity","price","price_total","createds","updated",)        
