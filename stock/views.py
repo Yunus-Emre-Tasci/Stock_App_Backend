@@ -90,3 +90,11 @@ class PurchasesView(viewsets.ModelViewSet):
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)    
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        product=Product.objects.get(id=instance.product_id)
+        product.stock-=instance.quantity
+        product.save()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
