@@ -130,3 +130,38 @@ class SalesView(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
         
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        
+        sales=request.data
+        product=Product.objects.get(id=instance.product_id)
+        
+        if sales["quantity"]>instance.quantity:
+            if sales["quantity"]<=instance.quantity + product.stock:
+                product.stock=instance.quantity + product.stock-sales["quantity"]
+                product.save()
+            else:
+                data={
+                "message":f"Dont have enough stock,current stock is {product.stock}"
+                }
+                return Response(data=data, status=status.HTTP_400_BAD_REQUEST)   
+        elif instance.quantity>=sales["quantity"]:     
+            product.stock+=instance.quantity-sales["quantity"]
+            product.save()
+            
+        self.perform_update(serializer)    
+        
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        #!####### DELETE Product Stock ########
+        product = Product.objects.get(id=instance.product_id)
+        product.stock += instance.quantity
+        product.save()
+        #!##################################
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)    
+        
