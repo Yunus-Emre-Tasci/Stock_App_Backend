@@ -20,7 +20,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model=Product
         fields=("id","name","category","category_id","brand","brand_id","stock",)    
         
-        read_only_fields=("stock",) #readonly yapmamızın amacı buradaki stock miktarının purchase ve sales lara göre değişiecek.
+        read_only_fields=("stock",) #readonly yapmamızın amacı buradaki stock miktarının purchase ve sales lara göre değişiecek olması.
         
 class CategoryProductSerializer(serializers.ModelSerializer):
     products=ProductSerializer(many=True)

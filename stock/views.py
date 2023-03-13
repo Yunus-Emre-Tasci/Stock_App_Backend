@@ -100,7 +100,7 @@ class PurchasesView(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class SalesView(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Sales.objects.all()
     serializer_class = SalesSerializer
     permission_classes = [DjangoModelPermissions]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -152,7 +152,14 @@ class SalesView(viewsets.ModelViewSet):
             product.stock+=instance.quantity-sales["quantity"]
             product.save()
             
-        self.perform_update(serializer)    
+        self.perform_update(serializer)   
+        
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data) 
         
     
     def destroy(self, request, *args, **kwargs):
