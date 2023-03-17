@@ -104,8 +104,8 @@ class SalesView(viewsets.ModelViewSet):
     serializer_class = SalesSerializer
     permission_classes = [DjangoModelPermissions]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["category", "brand"]
-    search_fields = ["name"]  
+    filterset_fields = ["brand", "product"]
+    search_fields = ["brand"]  
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

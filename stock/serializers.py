@@ -97,19 +97,13 @@ class SalesSerializer(serializers.ModelSerializer):
     product=serializers.StringRelatedField()
     product_id = serializers.IntegerField()
     brand_id = serializers.IntegerField()
-    # category=serializers.SerializerMethodField()
     time_hour=serializers.SerializerMethodField()
     createds=serializers.SerializerMethodField()
     class Meta:
         model=Sales
         fields=("id","user","user_id","brand","brand_id","product","product_id","quantity","price","price_total","time_hour","createds",)   
         
-    # def get_category(self,obj):
-        # product=Product.objects.get(id=obj.product_id)
-        # return Category.objects.get(id=product.category_id).name  
-    # yukarıdaki fonksiyonun kısa yazımı
-    # def get_category(self, obj):
-    #     return obj.product.category.name       
+   
         
     def get_time_hour(self,obj):
         return datetime.datetime.strftime(obj.createds,"%H:%M")    

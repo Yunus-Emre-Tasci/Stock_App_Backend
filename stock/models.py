@@ -65,6 +65,10 @@ class Sales(models.Model):
     def __str__(self):
         return f"{self.product} - {self.quantity}"
     
+    class Meta:
+        verbose_name = "Sale"
+        verbose_name_plural = "Sales"
+    
       
         
     
