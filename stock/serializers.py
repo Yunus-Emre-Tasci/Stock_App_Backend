@@ -65,7 +65,7 @@ class PurchasesSerializer(serializers.ModelSerializer):
     createds=serializers.SerializerMethodField()
     class Meta:
         model=Purchases
-        fields=("id","user","user_id","firm","firm_id","brand","brand_id","product","product_id","quantity","price","price_total","updated","category","time_hour","createds",)   
+        fields=("id","user","user_id","firm","firm_id","brand","brand_id","product","product_id","quantity","price","price_total","category","time_hour","createds",)   
         
     # def get_category(self,obj):
         # product=Product.objects.get(id=obj.product_id)
