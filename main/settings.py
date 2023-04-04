@@ -27,7 +27,9 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yunusemre.pythonanywhere.com', 'localhost', '127.0.0.1']
+
 
 
 # Application definition
@@ -148,7 +150,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-# CORS_ALLOW_ALL_ORIGINS: True
+CORS_ALLOW_ALL_ORIGINS: True
 
 CORS_ALLOWED_ORIGINS = [
     "https://example.com",
@@ -157,7 +159,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
     "http://127.0.0.1:8000",
     "http://localhost:3000",
+    "https://yunusemre.pythonanywhere.com",
+    "https://stock-app-roan.vercel.app",
 ]
+
 
 CORS_ALLOW_METHODS = [
     "DELETE",
